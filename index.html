@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Lista Semántica</title>
+    <title>Mi Lista Semántica Dinámica</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,8 +11,8 @@
     <header>
         <h1>Mi Lista Semántica</h1>
         <div class="perfil">
+            <input type="text" id="buscador" placeholder="🔍 Buscar tarea..." class="input-buscador">
             <span class="icono-perfil">👤</span>
-            <button class="btn-nuevo">+ nueva tarea</button>
         </div>
     </header>
 
@@ -23,81 +23,35 @@
                 <a href="#" class="activo">📋 Todas</a>
                 <a href="#">⏳ Pendientes</a>
                 <a href="#">✅ Completadas</a>
-                <a href="#">🔥 Urgentes</a>
             </nav>
             
             <div class="categorias">
-                <h3>Categorías</h3>
-                <div class="lista-cat"><span class="punto azul"></span> Trabajo</div>
-                <div class="lista-cat"><span class="punto verde"></span> Hogar</div>
-                <div class="lista-cat"><span class="punto amarillo"></span> Personal</div>
-                <div class="lista-cat"><span class="punto morado"></span> Estudio</div>
-                <div class="lista-cat"><span class="punto naranja"></span> Salud</div>
+                <h3>Añadir Tarea</h3>
+
+                <form id="formulario-tarea" class="formulario">
+    <input type="text" id="input-tarea" placeholder="Escribe una nueva tarea..." required>
+    
+    <select id="select-categoria" class="input-buscador">
+        <option value="hogar">Hogar</option>
+        <option value="trabajo">Trabajo</option>
+        <option value="personal">Personal</option>
+        <option value="estudio">Estudio</option>
+        <option value="salud">Salud</option>
+    </select>
+    
+    <button type="submit" class="btn-nuevo">+ Añadir</button>
+</form>
             </div>
         </aside>
 
         <main>
             <h2>Tareas por Hacer</h2>
             
-            <section class="contenedor-tareas">
-                
-                <article class="tarjeta-tarea">
-                    <input type="checkbox" class="checkbox">
-                    <p class="titulo-tarea">Comprar fruta fresca</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-hogar">Hogar</span>
-                        <span class="badge badge-prioridad">Media</span>
-                    </div>
-                </article>
-
-                <article class="tarjeta-tarea">
-                    <input type="checkbox" class="checkbox">
-                    <p class="titulo-tarea">Continuar proyecto Spring Boot</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-estudio">Estudio</span>
-                        <span class="badge badge-prioridad alta">Alta 🔥</span>
-                    </div>
-                </article>
-
-                <article class="tarjeta-tarea terminada">
-                    <input type="checkbox" class="checkbox" checked>
-                    <p class="titulo-tarea">Preparar presentación de ventas</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-trabajo">Trabajo</span>
-                        <span class="badge badge-prioridad">Media</span>
-                    </div>
-                </article>
-
-                <article class="tarjeta-tarea">
-                    <input type="checkbox" class="checkbox">
-                    <p class="titulo-tarea">Llamar a mamá por su cumpleaños</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-personal">Personal</span>
-                        <span class="badge badge-prioridad alta">Alta 🔥</span>
-                    </div>
-                </article>
-
-                <article class="tarjeta-tarea terminada">
-                    <input type="checkbox" class="checkbox" checked>
-                    <p class="titulo-tarea">Ir al gimnasio (Día de pierna)</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-salud">Salud</span>
-                        <span class="badge badge-prioridad baja">Baja</span>
-                    </div>
-                </article>
-
-                <article class="tarjeta-tarea">
-                    <input type="checkbox" class="checkbox">
-                    <p class="titulo-tarea">Pagar factura de la luz</p>
-                    <div class="grupo-badges">
-                        <span class="badge badge-hogar">Hogar</span>
-                        <span class="badge badge-prioridad urgente">Urgente 🚨</span>
-                    </div>
-                </article>
-
-            </section>
+            <section class="contenedor-tareas" id="lista-tareas">
+                </section>
         </main>
     </div>
 
+    <script src="app.js"></script>
 </body>
 </html>

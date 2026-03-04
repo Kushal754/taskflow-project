@@ -3,7 +3,7 @@
     --bg-header: #a8e6cf;
     --bg-aside: #f9f1e6;
     --bg-card: #ffffff;
-    --color-texto: #333;
+    --color-texto: hsl(0, 0%, 20%);
     --color-texto-suave: #666;
     
     /* Colores de Categorías */
@@ -232,4 +232,54 @@ main h2 {
     main {
         order: 1; 
     }
+
+
+    /* --- NUEVOS ESTILOS PARA JS --- */
+.input-buscador {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 15px;
+}
+
+#input-tarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.btn-nuevo {
+    background-color: #81c784;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-nuevo:hover { background-color: #66bb6a; }
+
+.btn-borrar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.btn-borrar:hover {
+    transform: scale(1.2);
+}
 }
