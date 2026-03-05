@@ -1,19 +1,18 @@
-Esta es una aplicación web interactiva para la gestión de tareas, desarrollada como práctica de manipulación del DOM y persistencia de datos.
+# 📝 TaskFlow - Sistema de Diseño con Tailwind CSS
 
-Características Principales:
+Esta es la versión refactorizada de la aplicación web de gestión de tareas, utilizando un sistema de diseño profesional y clases de utilidad.
 
-Añadir y Borrar: Permite crear nuevas tareas asignándoles una categoría y eliminarlas.
+## 🚀 Nuevas Características Implementadas
+* **Tailwind CSS:** Sustitución completa del CSS personalizado por clases de utilidad.
+* **Modo Oscuro (Dark Mode):** Soporte total para temas dinámicos usando el prefijo `dark:` y un botón interactivo que alterna la clase en el elemento raíz.
+* **Diseño Responsive:** Adaptación perfecta a dispositivos móviles usando las utilidades `md:` y Flexbox.
+* **Estados Interactivos (Bonus):** Transiciones suaves, estados `hover` en botones y estados `focus` (anillos de color) en los inputs y selects.
 
-Persistencia Local: Utiliza LocalStorage para guardar las tareas y que no se borren al refrescar.
+## 🛠️ Tecnologías Utilizadas
+* HTML5 Semántico
+* Tailwind CSS (Framework)
+* JavaScript Vanilla (Manipulación del DOM, LocalStorage y lógica de temas)
 
-Buscador (Bonus): Filtro interactivo que oculta las tareas que no coinciden con la búsqueda.
-
-Diseño Responsive: Maquetación con CSS Flexbox y Media Queries para móviles.
-
-Tecnologías Utilizadas:                 
-
-HTML5 (Estructura semántica)
-
-CSS3 (Variables y Flexbox)
-
-JavaScript Vanilla (Manipulación del DOM y LocalStorage)
+## 🔗 Enlace del Proyecto
+Puedes ver la aplicación final funcionando aquí: 
+[https://taskflow-project-six-pi.vercel.app/]
