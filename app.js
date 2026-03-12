@@ -94,7 +94,7 @@ function renderizarTareas(filtroTexto = '') {
 
     tareasFiltradas.forEach(tarea => {
         const article = document.createElement('article');
-        article.className = 'bg-white dark:bg-gray-800 p-4 md:p-5 rounded-xl shadow-md hover:shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-green-500 dark:border-green-400 group';
+        article.className = 'bg-white dark:bg-gray-800 p-4 md:p-5 rounded-xl shadow-md hover:shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-green-500 dark:border-green-400 group w-full';
         
         const categoriaSegura = tarea.categoria || 'personal';
         const nombreCat = categoriaSegura.charAt(0).toUpperCase() + categoriaSegura.slice(1);
@@ -115,15 +115,16 @@ function renderizarTareas(filtroTexto = '') {
         const textoTachado = tarea.completada ? 'line-through opacity-50' : '';
         const checkMarcado = tarea.completada ? 'checked' : '';
 
+        // AQUI ESTÁ LA CORRECCIÓN DEL TEXTO (Añadido min-w-0, w-full, break-words y shrink-0)
         article.innerHTML = `
-            <div class="flex items-center gap-4 flex-1">
+            <div class="flex items-center gap-4 flex-1 min-w-0 w-full">
                 <input type="checkbox" ${checkMarcado} onchange="cambiarEstado(${tarea.id})" class="w-6 h-6 text-green-500 rounded border-gray-300 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 cursor-pointer accent-green-500 shrink-0">
-                <div class="flex flex-col">
-                    <p class="text-lg font-medium text-gray-800 dark:text-gray-200 transition-all ${textoTachado}">${tarea.texto}</p>
+                <div class="flex flex-col flex-1 min-w-0">
+                    <p class="text-lg font-medium text-gray-800 dark:text-gray-200 transition-all break-words ${textoTachado}">${tarea.texto}</p>
                     <span class="text-xs font-bold ${colorPrio} md:hidden mt-1 flex items-center gap-1">${iconoPrio} Prioridad ${prioridadSegura}</span>
                 </div>
             </div>
-            <div class="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto mt-2 md:mt-0 pl-10 md:pl-0">
+            <div class="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto mt-2 md:mt-0 pl-10 md:pl-0 shrink-0">
                 <span class="hidden md:flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-lg border border-gray-100 dark:border-gray-700 ${colorPrio}" title="Prioridad ${prioridadSegura}">
                     ${iconoPrio}
                 </span>
