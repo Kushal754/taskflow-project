@@ -1,0 +1,2 @@
+# 💻 Flujo de trabajo con Cursor IDE
+Este documento servirá como registro de mi primera toma de contacto con Cursor, un editor de código potenciado por IA. Aquí anotaré mi experiencia explorando su interfaz, el uso de herramientas como el chat contextual y Composer, los atajos de teclado más útiles y ejemplos reales de cómo ha mejorado mi código en TaskFlow.

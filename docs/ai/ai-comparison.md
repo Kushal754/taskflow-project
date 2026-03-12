@@ -1,0 +1,2 @@
+# 🤖 Comparativa entre Asistentes de IA
+En este documento voy a registrar mis experimentos comparando diferentes modelos de Inteligencia Artificial (como ChatGPT, Claude o Gemini). El objetivo es evaluar cómo cada uno explica conceptos técnicos, detecta errores en código (debugging) y genera nuevas implementaciones, analizando sus fortalezas y debilidades.

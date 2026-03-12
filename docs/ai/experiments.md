@@ -1,0 +1,2 @@
+# 🧪 Experimentos de Programación con y sin IA
+Este documento recoge una comparativa práctica de resolución de problemas. Analizaré la diferencia entre resolver pequeños retos algorítmicos y tareas del proyecto TaskFlow de forma manual (sin ayuda) frente a hacerlo asistido por IA, midiendo el tiempo invertido, la calidad del código y mi comprensión del problema.

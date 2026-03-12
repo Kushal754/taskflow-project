@@ -1,0 +1,2 @@
+# 🎯 Prompt Engineering Aplicado
+En esta sección voy a documentar mis prácticas de "Prompt Engineering" (Ingeniería de instrucciones). Registraré al menos 10 prompts útiles utilizando diferentes técnicas (asignación de roles, few-shot prompting, razonamiento paso a paso y restricciones), explicando por qué cada instrucción funciona bien para generar o refactorizar código.
