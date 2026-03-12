@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskFlow - Tailwind CSS</title>
+    <title>TaskFlow Pro - Tailwind CSS</title>
     <link rel="stylesheet" href="output.css">
 </head>
 <body class="bg-green-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
 
     <header class="flex justify-between items-center p-4 md:p-6 bg-green-300 dark:bg-green-800 shadow-md transition-colors duration-300">
-        <h1 class="text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">TaskFlow</h1>
+        <h1 class="text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">TaskFlow Pro</h1>
         <div class="flex items-center gap-3 md:gap-4">
-            <input type="text" id="buscador" placeholder="🔍 Buscar..." class="hidden md:block px-4 py-2 rounded-full border-none outline-none focus:ring-4 focus:ring-green-400 dark:focus:ring-green-500 bg-white dark:bg-gray-700 dark:text-white transition-all w-48 focus:w-64 shadow-inner">
-            
-            <button id="btn-dark-mode" class="p-2 bg-white dark:bg-gray-700 rounded-full shadow hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-green-500 text-xl" title="Alternar Modo Oscuro">
-                🌓
-            </button>
+            <input type="text" id="buscador" placeholder="🔍 Buscar tarea..." class="hidden md:block px-4 py-2 rounded-full border-none outline-none focus:ring-4 focus:ring-green-400 dark:focus:ring-green-500 bg-white dark:bg-gray-700 dark:text-white transition-all w-48 focus:w-64 shadow-inner">
+            <button id="btn-dark-mode" class="p-2 bg-white dark:bg-gray-700 rounded-full shadow hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-green-500 text-xl" title="Alternar Modo Oscuro">🌓</button>
             <span class="text-2xl bg-white dark:bg-gray-700 p-2 rounded-full shadow">👤</span>
         </div>
     </header>
@@ -23,33 +20,65 @@
     <div class="flex flex-col md:flex-row gap-6 p-4 md:p-8 max-w-7xl mx-auto">
         
         <aside class="w-full md:w-1/3 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl transition-colors duration-300">
-            <nav class="mb-8 hidden md:block">
-                <a href="#" class="block py-3 px-4 mb-2 rounded-lg bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 font-bold shadow-sm">📋 Todas las tareas</a>
-            </nav>
+            
+            <div class="mb-6">
+                <h3 class="text-sm uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 mb-3">Estado</h3>
+                <nav class="flex flex-col gap-2" id="filtros-estado">
+                    <button data-filtro="todas" class="filtro-estado-btn w-full text-left py-2 px-4 rounded-lg bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-100 font-bold shadow-sm transition-colors">📋 Todas</button>
+                    <button data-filtro="pendientes" class="filtro-estado-btn w-full text-left py-2 px-4 rounded-lg hover:bg-green-100 dark:hover:bg-green-800 text-gray-700 dark:text-gray-300 font-bold transition-colors">⏳ Pendientes</button>
+                    <button data-filtro="completadas" class="filtro-estado-btn w-full text-left py-2 px-4 rounded-lg hover:bg-green-100 dark:hover:bg-green-800 text-gray-700 dark:text-gray-300 font-bold transition-colors">✅ Completadas</button>
+                </nav>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-sm uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 mb-3">Prioridad</h3>
+                <nav class="flex flex-wrap gap-2" id="filtros-prioridad">
+                    <button data-prioridad="todas" class="filtro-prio-btn px-3 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 transition-colors">Todas</button>
+                    <button data-prioridad="alta" class="filtro-prio-btn px-3 py-1 rounded-full text-sm font-bold border border-red-300 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">🔴 Alta</button>
+                    <button data-prioridad="media" class="filtro-prio-btn px-3 py-1 rounded-full text-sm font-bold border border-yellow-400 text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 transition-colors">🟡 Media</button>
+                    <button data-prioridad="baja" class="filtro-prio-btn px-3 py-1 rounded-full text-sm font-bold border border-green-300 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors">🟢 Baja</button>
+                </nav>
+            </div>
             
             <div class="categorias">
                 <h3 class="text-lg font-bold mb-4 border-b-2 border-green-200 dark:border-gray-600 pb-2">➕ Añadir Tarea</h3>
-                
                 <form id="formulario-tarea" class="flex flex-col gap-4">
                     <input type="text" id="input-tarea" placeholder="¿Qué necesitas hacer?" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
                     
-                    <select id="select-categoria" class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
-                        <option value="hogar">Hogar</option>
-                        <option value="trabajo">Trabajo</option>
-                        <option value="personal">Personal</option>
-                        <option value="estudio">Estudio</option>
-                        <option value="salud">Salud</option>
-                    </select>
-                    
+                    <div class="flex gap-2">
+                        <select id="select-categoria" class="w-1/2 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
+                            <option value="hogar">Hogar</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="personal">Personal</option>
+                            <option value="estudio">Estudio</option>
+                            <option value="salud">Salud</option>
+                        </select>
+                        <select id="select-prioridad" class="w-1/2 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
+                            <option value="baja">🟢 Baja</option>
+                            <option value="media" selected>🟡 Media</option>
+                            <option value="alta">🔴 Alta</option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1">
-                        + Añadir
+                        + Añadir Tarea
                     </button>
                 </form>
             </div>
         </aside>
 
         <main class="flex-1">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">Tareas Pendientes</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Mis Tareas</h2>
+                <input type="text" id="buscador-movil" placeholder="🔍 Buscar..." class="md:hidden px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 outline-none focus:ring-2 focus:ring-green-400 bg-white dark:bg-gray-700 dark:text-white w-32 shadow-inner">
+            </div>
+            
+            <div id="mensaje-vacio" class="hidden text-center py-10 opacity-50">
+                <p class="text-5xl mb-4">✨</p>
+                <p class="text-lg font-bold">¡Todo limpio!</p>
+                <p class="text-sm">No hay tareas que coincidan con estos filtros.</p>
+            </div>
+
             <section id="lista-tareas" class="flex flex-col gap-4">
                 </section>
         </main>
