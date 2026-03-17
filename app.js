@@ -1,12 +1,14 @@
 // --- 1. REFERENCIAS AL DOM ---
-const formTarea = document.getElementById('formulario-tarea');
-const inputTextoTarea = document.getElementById('input-tarea');
+const formulario = document.getElementById('formulario-tarea');
+const inputTarea = document.getElementById('input-tarea');
 const selectCategoria = document.getElementById('select-categoria');
 const selectPrioridad = document.getElementById('select-prioridad');
 const listaTareas = document.getElementById('lista-tareas');
 const mensajeVacio = document.getElementById('mensaje-vacio');
-const buscadorDesktop = document.getElementById('buscador');
+const buscador = document.getElementById('buscador');
 const buscadorMovil = document.getElementById('buscador-movil');
+const filtroCategoriaSelect = document.getElementById('filtro-categoria');
+const btnMic = document.getElementById('btn-mic');
 
 // Botones de filtro
 const botonesEstado = document.querySelectorAll('.filtro-estado-btn');
@@ -26,14 +28,7 @@ btnDarkMode.addEventListener('click', () => {
 let tareas = JSON.parse(localStorage.getItem('tareas')) || [];
 let filtroEstado = 'todas';
 let filtroPrioridad = 'todas';
-
-const CLASES_CATEGORIA = {
-    hogar: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-    trabajo: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    estudio: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-    salud: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-    personal: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
-};
+let filtroCategoria = 'todas';
 
 // --- 4. EVENTOS DE FILTROS ---
 // Filtros de Estado
@@ -69,63 +64,53 @@ botonesPrioridad.forEach(boton => {
     });
 });
 
-// --- 5. RENDERIZADO Y LÓGICA ---
-/**
- * Obtiene el texto de búsqueda según el breakpoint actual.
- * @returns {string}
- */
-function obtenerTextoBusquedaActual() {
-    return (window.innerWidth < 768) ? buscadorMovil.value : buscadorDesktop.value;
-}
-
-/**
- * Aplica filtros (texto/estado/prioridad) sobre un listado de tareas.
- * @param {Array<{id:number, texto:string, categoria?:string, prioridad?:string, completada:boolean}>} tareasFuente
- * @param {{filtroTexto?: string, filtroEstadoActual?: string, filtroPrioridadActual?: string}} filtros
- * @returns {Array<{id:number, texto:string, categoria?:string, prioridad?:string, completada:boolean}>}
- */
-function filtrarTareas(tareasFuente, { filtroTexto = '', filtroEstadoActual = 'todas', filtroPrioridadActual = 'todas' } = {}) {
-    const textoNormalizado = filtroTexto.toLowerCase();
-
-    return tareasFuente.filter((tarea) => {
-        const coincideTexto = tarea.texto.toLowerCase().includes(textoNormalizado);
-
-        let coincideEstado = true;
-        if (filtroEstadoActual === 'pendientes') coincideEstado = !tarea.completada;
-        if (filtroEstadoActual === 'completadas') coincideEstado = tarea.completada;
-
-        let coincidePrioridad = true;
-        if (filtroPrioridadActual !== 'todas') {
-            const prioridadTarea = tarea.prioridad || 'media';
-            coincidePrioridad = (prioridadTarea === filtroPrioridadActual);
-        }
-
-        return coincideTexto && coincideEstado && coincidePrioridad;
+// Filtro de Categoría
+if (filtroCategoriaSelect) {
+    filtroCategoriaSelect.addEventListener('change', () => {
+        filtroCategoria = filtroCategoriaSelect.value || 'todas';
+        actualizarVista();
     });
 }
 
+// --- 5. RENDERIZADO Y LÓGICA ---
 /**
- * Re-renderiza la lista de tareas aplicando los filtros actuales.
+ * Recalcula el texto de búsqueda activo (desktop/móvil) y re-renderiza la lista
+ * aplicando todos los filtros actuales.
  * @returns {void}
  */
 function actualizarVista() {
-    const textoBusqueda = obtenerTextoBusquedaActual();
+    const textoBusqueda = (window.innerWidth < 768) ? buscadorMovil.value : buscador.value;
     renderizarTareas(textoBusqueda);
 }
 
 /**
- * Renderiza tareas en el DOM según el filtro de texto y filtros globales.
- * @param {string} [filtroTexto='']
+ * Renderiza el listado de tareas aplicando filtros por texto, estado, prioridad y categoría.
+ * @param {string} [filtroTexto=''] Texto del buscador.
  * @returns {void}
  */
 function renderizarTareas(filtroTexto = '') {
     listaTareas.innerHTML = '';
 
-    console.log('Renderizando tareas...');
-    const tareasFiltradas = filtrarTareas(tareas, {
-        filtroTexto,
-        filtroEstadoActual: filtroEstado,
-        filtroPrioridadActual: filtroPrioridad,
+    let tareasFiltradas = tareas.filter(tarea => {
+        const coincideTexto = tarea.texto.toLowerCase().includes(filtroTexto.toLowerCase());
+        
+        let coincideEstado = true;
+        if (filtroEstado === 'pendientes') coincideEstado = !tarea.completada;
+        if (filtroEstado === 'completadas') coincideEstado = tarea.completada;
+
+        let coincidePrioridad = true;
+        if (filtroPrioridad !== 'todas') {
+            const prioTarea = tarea.prioridad || 'media';
+            coincidePrioridad = (prioTarea === filtroPrioridad);
+        }
+
+        let coincideCategoria = true;
+        if (filtroCategoria !== 'todas') {
+            const catTarea = (tarea.categoria || 'personal');
+            coincideCategoria = (catTarea === filtroCategoria);
+        }
+
+        return coincideTexto && coincideEstado && coincidePrioridad && coincideCategoria;
     });
 
     if (tareasFiltradas.length === 0) {
@@ -139,8 +124,15 @@ function renderizarTareas(filtroTexto = '') {
         article.className = 'bg-white dark:bg-gray-800 p-4 md:p-5 rounded-xl shadow-md hover:shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-green-500 dark:border-green-400 group w-full';
         
         const categoriaSegura = tarea.categoria || 'personal';
-        const nombreCategoria = categoriaSegura.charAt(0).toUpperCase() + categoriaSegura.slice(1);
-        const clasesCategoria = CLASES_CATEGORIA[categoriaSegura] || CLASES_CATEGORIA.personal;
+        const nombreCat = categoriaSegura.charAt(0).toUpperCase() + categoriaSegura.slice(1);
+        
+        let colorClases = '';
+        if (categoriaSegura === 'hogar') colorClases = 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+        else if (categoriaSegura === 'trabajo') colorClases = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+        else if (categoriaSegura === 'estudio') colorClases = 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+        else if (categoriaSegura === 'salud') colorClases = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+        else if (categoriaSegura === 'compras') colorClases = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
+        else colorClases = 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200';
 
         const prioridadSegura = tarea.prioridad || 'media';
         let iconoPrio = '🟡';
@@ -164,7 +156,7 @@ function renderizarTareas(filtroTexto = '') {
                 <span class="hidden md:flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-lg border border-gray-100 dark:border-gray-700 ${colorPrio}" title="Prioridad ${prioridadSegura}">
                     ${iconoPrio}
                 </span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full shadow-sm ${clasesCategoria}">${nombreCategoria}</span>
+                <span class="px-3 py-1 text-xs font-bold rounded-full shadow-sm ${colorClases}">${nombreCat}</span>
                 <button class="text-xl opacity-70 hover:opacity-100 hover:scale-125 transition-all text-red-500 focus:outline-none" onclick="borrarTarea(${tarea.id})" title="Borrar tarea">
                     🗑️
                 </button>
@@ -175,23 +167,16 @@ function renderizarTareas(filtroTexto = '') {
 }
 
 // --- 6. ACCIONES ---
-/**
- * Alterna el estado completada de una tarea.
- * Se mantiene en window para que funcione con el onclick inline del DOM.
- * @param {number} id
- * @returns {void}
- */
 window.cambiarEstado = function(id) {
     tareas = tareas.map(t => t.id === id ? { ...t, completada: !t.completada } : t);
     localStorage.setItem('tareas', JSON.stringify(tareas));
     actualizarVista();
 };
 
-formTarea.addEventListener('submit', function(e) {
+formulario.addEventListener('submit', function(e) {
     e.preventDefault(); 
-    const texto = inputTextoTarea.value.trim();
-    // Validación extra: no permitir solo espacios y mínimo 3 caracteres reales
-    if (texto.length >= 3) {
+    const texto = inputTarea.value.trim(); 
+    if (texto !== '') {
         tareas.unshift({
             id: Date.now(),
             texto: texto,
@@ -204,42 +189,117 @@ formTarea.addEventListener('submit', function(e) {
         if (filtroEstado === 'completadas') document.querySelector('[data-filtro="todas"]').click();
         if (filtroPrioridad !== 'todas' && filtroPrioridad !== selectPrioridad.value) {
             document.querySelector('[data-prioridad="todas"]').click();
+        } else if (filtroCategoriaSelect && filtroCategoria !== 'todas' && filtroCategoria !== selectCategoria.value) {
+            // Mantiene la UX consistente: si el usuario está filtrando por otra categoría,
+            // al crear una tarea fuera de ese filtro volvemos a "todas" para que la vea.
+            filtroCategoriaSelect.value = 'todas';
+            filtroCategoria = 'todas';
+            actualizarVista();
         } else {
             actualizarVista(); 
         }
         
-        inputTextoTarea.value = ''; 
+        inputTarea.value = ''; 
     }
 });
 
-/**
- * Elimina una tarea por id.
- * Se mantiene en window para que funcione con el onclick inline del DOM.
- * @param {number} id
- * @returns {void}
- */
 window.borrarTarea = function(id) {
     tareas = tareas.filter(t => t.id !== id);
     localStorage.setItem('tareas', JSON.stringify(tareas));
     actualizarVista(); 
 };
 
-buscadorDesktop.addEventListener('input', actualizarVista);
+buscador.addEventListener('input', actualizarVista);
 buscadorMovil.addEventListener('input', actualizarVista);
 
-// Función para eliminar todas las tareas completadas a la vez
+// --- 7. DICTADO POR VOZ (WEB SPEECH API) ---
 /**
- * Elimina todas las tareas completadas.
- * Se mantiene en window para poder invocarse desde la UI.
+ * Crea (si existe) una instancia de SpeechRecognition del navegador.
+ * Devuelve null si el navegador no lo soporta.
+ * @returns {SpeechRecognition|null}
+ */
+function crearSpeechRecognition() {
+    const SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognitionImpl) return null;
+
+    const recognition = new SpeechRecognitionImpl();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    return recognition;
+}
+
+/**
+ * Configura el botón de micrófono para dictado por voz.
+ * - Click: alterna entre empezar/detener
+ * - Feedback visual: rojo + animate-pulse mientras escucha
  * @returns {void}
  */
-window.borrarTodasLasCompletadas = function() {
-    tareas = tareas.filter(t => !t.completada);
-    localStorage.setItem('tareas', JSON.stringify(tareas));
-    actualizarVista();
-};
+function inicializarDictadoPorVoz() {
+    if (!btnMic || !inputTarea) return;
 
+    const recognition = crearSpeechRecognition();
+    if (!recognition) {
+        btnMic.disabled = true;
+        btnMic.classList.add('opacity-40', 'cursor-not-allowed');
+        btnMic.title = 'Dictado por voz no disponible en este navegador';
+        return;
+    }
+
+    /** @type {boolean} */
+    let escuchando = false;
+
+    const actualizarUI = () => {
+        btnMic.classList.toggle('animate-pulse', escuchando);
+        btnMic.classList.toggle('bg-red-500', escuchando);
+        btnMic.classList.toggle('text-white', escuchando);
+        btnMic.classList.toggle('border-red-600', escuchando);
+        if (escuchando) {
+            btnMic.title = 'Escuchando... (clic para parar)';
+        } else {
+            btnMic.title = 'Dictar por voz';
+        }
+    };
+
+    recognition.addEventListener('start', () => {
+        escuchando = true;
+        actualizarUI();
+    });
+
+    recognition.addEventListener('end', () => {
+        escuchando = false;
+        actualizarUI();
+    });
+
+    recognition.addEventListener('result', (event) => {
+        // Concatenamos resultados parciales y finales para una experiencia fluida.
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        inputTarea.value = transcript.trimStart();
+        inputTarea.focus();
+    });
+
+    recognition.addEventListener('error', () => {
+        // Si hay error (permisos, etc.), salimos del modo "escuchando" con feedback.
+        escuchando = false;
+        actualizarUI();
+    });
+
+    btnMic.addEventListener('click', () => {
+        if (escuchando) {
+            recognition.stop();
+            return;
+        }
+        try {
+            recognition.start();
+        } catch {
+            // Algunos navegadores lanzan si start() se llama muy seguido.
+        }
+    });
+}
 
 // --- INICIAR ---
+inicializarDictadoPorVoz();
 actualizarVista();
-

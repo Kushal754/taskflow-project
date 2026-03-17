@@ -39,17 +39,34 @@
                     <button data-prioridad="baja" class="filtro-prio-btn px-3 py-1 rounded-full text-sm font-bold border border-green-300 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors">🟢 Baja</button>
                 </nav>
             </div>
+
+            <div class="mb-8">
+                <h3 class="text-sm uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 mb-3">Categoría</h3>
+                <select id="filtro-categoria" class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
+                    <option value="todas" selected>Todas</option>
+                    <option value="trabajo">Trabajo</option>
+                    <option value="personal">Personal</option>
+                    <option value="compras">Compras</option>
+                    <option value="hogar">Hogar</option>
+                    <option value="estudio">Estudio</option>
+                    <option value="salud">Salud</option>
+                </select>
+            </div>
             
             <div class="categorias">
                 <h3 class="text-lg font-bold mb-4 border-b-2 border-green-200 dark:border-gray-600 pb-2">➕ Añadir Tarea</h3>
                 <form id="formulario-tarea" class="flex flex-col gap-4">
-                    <input type="text" id="input-tarea" placeholder="¿Qué necesitas hacer?" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
+                    <div class="flex items-stretch gap-2">
+                        <input type="text" id="input-tarea" placeholder="¿Qué necesitas hacer?" required class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
+                        <button type="button" id="btn-mic" class="w-12 grid place-items-center rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow transition-all focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 text-xl" title="Dictar por voz">🎤</button>
+                    </div>
                     
                     <div class="flex gap-2">
                         <select id="select-categoria" class="w-1/2 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-all shadow-sm">
                             <option value="hogar">Hogar</option>
                             <option value="trabajo">Trabajo</option>
                             <option value="personal">Personal</option>
+                            <option value="compras">Compras</option>
                             <option value="estudio">Estudio</option>
                             <option value="salud">Salud</option>
                         </select>
