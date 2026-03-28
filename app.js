@@ -1,4 +1,4 @@
-import { apiClient } from './api/client.js';
+import { apiClient } from './services/client.js';
 
 // --- ESTADO GLOBAL ---
 let tareas = [];
