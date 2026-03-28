@@ -1,5 +1,5 @@
 // URL base de nuestro servidor Node.js
-const API_URL = 'http://localhost:3000/api/v1/tasks';
+const API_URL = 'https://taskflow-backend-gb8e.onrender.com/api/v1/tasks';
 
 // Exportamos un objeto que centraliza todas las llamadas a la red
 export const apiClient = {
