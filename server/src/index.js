@@ -29,3 +29,6 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`🚀 Servidor escuchando en http://localhost:${port}`);
 });
+
+// Para que Vercel Serverless pueda usar nuestra app de Express
+module.exports = app;
