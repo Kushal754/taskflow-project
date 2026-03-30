@@ -32,7 +32,7 @@ const htmlRoot = document.getElementById('html-root');
 const prioridadANumero = (prioStr) => {
     if (prioStr === 'alta') return 3;
     if (prioStr === 'media') return 2;
-    return 1; // baja
+    return 1; // baja por defecto
 };
 
 // --- MODO OSCURO ---
@@ -67,7 +67,6 @@ function actualizarVista() {
         // 2. Filtro Categoría
         let pasaCategoria = true;
         if (filtroCategoria !== 'todas') {
-            // Asegurar que coincidan (ignorar mayúsculas)
             pasaCategoria = tarea.categoria && tarea.categoria.toLowerCase() === filtroCategoria.toLowerCase();
         }
 
@@ -77,7 +76,14 @@ function actualizarVista() {
             pasaBusqueda = tarea.titulo.toLowerCase().includes(textoBusqueda.toLowerCase());
         }
 
-        return pasaEstado && pasaCategoria && pasaBusqueda;
+        // 4. Filtro Prioridad (AÑADIDO)
+        let pasaPrioridad = true;
+        if (filtroPrioridad !== 'todas') {
+            const prioNum = prioridadANumero(filtroPrioridad);
+            pasaPrioridad = tarea.prioridad === prioNum;
+        }
+
+        return pasaEstado && pasaCategoria && pasaBusqueda && pasaPrioridad;
     });
 
     // Mostrar mensaje vacío si no hay tareas
@@ -89,12 +95,19 @@ function actualizarVista() {
         // Renderizar tareas
         tareasFiltradas.forEach(tarea => {
             const div = document.createElement('div');
-            // Estilos de Tailwind para la tarjeta de la tarea
             div.className = `flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-xl shadow-sm border ${tarea.completada ? 'bg-gray-100 border-gray-200 dark:bg-gray-800 dark:border-gray-700 opacity-70' : 'bg-white border-green-100 dark:bg-gray-800 dark:border-gray-600'} transition-all`;
             
+            // Determinar color del circulito según la prioridad
+            let colorPrioridad = 'bg-green-500'; // Baja (1) por defecto
+            if (tarea.prioridad === 3) colorPrioridad = 'bg-red-500';
+            if (tarea.prioridad === 2) colorPrioridad = 'bg-yellow-500';
+
             div.innerHTML = `
                 <div class="flex items-center gap-3 w-full sm:w-auto mb-3 sm:mb-0">
                     <input type="checkbox" ${tarea.completada ? 'checked' : ''} onchange="cambiarEstado(${tarea.id})" class="w-5 h-5 text-green-500 rounded focus:ring-green-400 cursor-pointer">
+                    
+                    <div class="w-3 h-3 rounded-full ${colorPrioridad} shrink-0" title="Prioridad"></div>
+                    
                     <span class="font-semibold text-lg ${tarea.completada ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-100'}">
                         ${tarea.titulo}
                     </span>
@@ -146,9 +159,20 @@ window.cambiarEstado = (id) => {
 };
 
 // --- LISTENERS DE FILTROS ---
+// Filtro de Estado (Todas, Pendientes, Completadas)
 btnFiltrosEstado.forEach(btn => {
     btn.addEventListener('click', (e) => {
-        filtroEstado = e.target.dataset.filtro;
+        // Obtenemos el valor del data-attribute (ej: data-filtro="pendientes")
+        filtroEstado = e.target.closest('button').dataset.filtro;
+        actualizarVista();
+    });
+});
+
+// Filtro de Prioridad (Todas, Alta, Media, Baja)
+btnFiltrosPrioridad.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Obtenemos el valor del data-attribute (ej: data-prio="alta")
+        filtroPrioridad = e.target.closest('button').dataset.prio;
         actualizarVista();
     });
 });
