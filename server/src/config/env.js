@@ -1,9 +1,7 @@
+
 require('dotenv').config();
 
-if (!process.env.PORT) {
-  throw new Error('❌ CRITICAL: The PORT is not defined in the .env file');
-}
 
 module.exports = {
-  port: process.env.PORT
+  port: process.env.PORT || 3000 // Si no hay puerto en .env, usa el 3000 por defecto
 };
