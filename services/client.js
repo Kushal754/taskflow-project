@@ -1,5 +1,7 @@
-// URL base de nuestro servidor Node.js
-const API_URL = 'https://taskflow-backend-gb8e.onrender.com/api/v1/tasks';
+
+// Si estamos en local usa el puerto 3000, si estamos en Vercel usa la ruta relativa
+const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+const API_URL = isLocal ? 'http://localhost:3000/api/v1/tasks' : '/api/v1/tasks';
 
 // Exportamos un objeto que centraliza todas las llamadas a la red
 export const apiClient = {

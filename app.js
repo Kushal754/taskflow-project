@@ -59,24 +59,20 @@ function actualizarVista() {
     
     // Aplicar Filtros combinados
     let tareasFiltradas = tareas.filter(tarea => {
-        // 1. Filtro Estado
         let pasaEstado = true;
         if (filtroEstado === 'pendientes') pasaEstado = !tarea.completada;
         if (filtroEstado === 'completadas') pasaEstado = tarea.completada;
 
-        // 2. Filtro Categoría
         let pasaCategoria = true;
         if (filtroCategoria !== 'todas') {
             pasaCategoria = tarea.categoria && tarea.categoria.toLowerCase() === filtroCategoria.toLowerCase();
         }
 
-        // 3. Filtro Búsqueda
         let pasaBusqueda = true;
         if (textoBusqueda) {
             pasaBusqueda = tarea.titulo.toLowerCase().includes(textoBusqueda.toLowerCase());
         }
 
-        // 4. Filtro Prioridad (AÑADIDO)
         let pasaPrioridad = true;
         if (filtroPrioridad !== 'todas') {
             const prioNum = prioridadANumero(filtroPrioridad);
@@ -97,16 +93,16 @@ function actualizarVista() {
             const div = document.createElement('div');
             div.className = `flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-xl shadow-sm border ${tarea.completada ? 'bg-gray-100 border-gray-200 dark:bg-gray-800 dark:border-gray-700 opacity-70' : 'bg-white border-green-100 dark:bg-gray-800 dark:border-gray-600'} transition-all`;
             
-            // Determinar color del circulito según la prioridad
-            let colorPrioridad = 'bg-green-500'; // Baja (1) por defecto
-            if (tarea.prioridad === 3) colorPrioridad = 'bg-red-500';
-            if (tarea.prioridad === 2) colorPrioridad = 'bg-yellow-500';
+            // 🔥 COLORES NATIVOS BLINDADOS 🔥
+            let colorHex = '#22c55e'; // Verde (Baja) por defecto
+            if (tarea.prioridad === 3) colorHex = '#ef4444'; // Rojo (Alta)
+            if (tarea.prioridad === 2) colorHex = '#eab308'; // Amarillo (Media)
 
             div.innerHTML = `
                 <div class="flex items-center gap-3 w-full sm:w-auto mb-3 sm:mb-0">
                     <input type="checkbox" ${tarea.completada ? 'checked' : ''} onchange="cambiarEstado(${tarea.id})" class="w-5 h-5 text-green-500 rounded focus:ring-green-400 cursor-pointer">
                     
-                    <div class="w-3 h-3 rounded-full ${colorPrioridad} shrink-0" title="Prioridad"></div>
+                    <div style="width: 14px; height: 14px; border-radius: 50%; background-color: ${colorHex}; flex-shrink: 0;" title="Prioridad"></div>
                     
                     <span class="font-semibold text-lg ${tarea.completada ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-100'}">
                         ${tarea.titulo}
@@ -162,8 +158,19 @@ window.cambiarEstado = (id) => {
 // Filtro de Estado (Todas, Pendientes, Completadas)
 btnFiltrosEstado.forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Obtenemos el valor del data-attribute (ej: data-filtro="pendientes")
-        filtroEstado = e.target.closest('button').dataset.filtro;
+        const botonPulsado = e.target.closest('button');
+        filtroEstado = botonPulsado.dataset.filtro;
+
+        // Limpiar todos los botones
+        btnFiltrosEstado.forEach(b => {
+            b.classList.remove('bg-green-200', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-100');
+            b.classList.add('text-gray-700', 'dark:text-gray-300', 'hover:bg-green-100', 'dark:hover:bg-green-800');
+        });
+
+        // Pintar el botón activo
+        botonPulsado.classList.remove('text-gray-700', 'dark:text-gray-300', 'hover:bg-green-100', 'dark:hover:bg-green-800');
+        botonPulsado.classList.add('bg-green-200', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-100');
+
         actualizarVista();
     });
 });
@@ -171,8 +178,8 @@ btnFiltrosEstado.forEach(btn => {
 // Filtro de Prioridad (Todas, Alta, Media, Baja)
 btnFiltrosPrioridad.forEach(btn => {
     btn.addEventListener('click', (e) => {
-        // Obtenemos el valor del data-attribute (ej: data-prio="alta")
-        filtroPrioridad = e.target.closest('button').dataset.prio;
+        const botonPulsado = e.target.closest('button');
+        filtroPrioridad = botonPulsado.dataset.prio;
         actualizarVista();
     });
 });
@@ -198,7 +205,7 @@ if (btnMic) {
         
         btnMic.addEventListener('click', () => {
             recognition.start();
-            btnMic.classList.add('bg-red-100', 'border-red-400'); // Feedback visual
+            btnMic.classList.add('bg-red-100', 'border-red-400');
         });
 
         recognition.onresult = (evento) => {
@@ -217,3 +224,4 @@ if (btnMic) {
 
 // ARRANCAR APP
 inicializarApp();
+
